@@ -1,5 +1,3 @@
-
-https://github.com/prathameshpanse51/urine_strip_analyzer/assets/93512551/183ad38a-6f61-41c3-985a-0ce63db2c350
 # Urine Strip Analyzer
 
  ## Installation
@@ -13,4 +11,4 @@ https://github.com/prathameshpanse51/urine_strip_analyzer/assets/93512551/183ad3
     ```
 
  ## Demo Video
-Uploading Urine Strip Analyzer - Google Chrome 2024-05-23 22-01-58.mp4…
+https://github.com/prathameshpanse51/urine_strip_analyzer/assets/93512551/183ad38a-6f61-41c3-985a-0ce63db2c350
