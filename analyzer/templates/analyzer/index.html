@@ -107,6 +107,12 @@
         align-items: center;
         justify-content: space-between;
       }
+      #preview {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+      }
     </style>
   </head>
   <body>
@@ -156,6 +162,7 @@
           Upload
         </button>
       </div>
+      <div id="preview"></div>
       <dialog id="myDialog">
         <div class="result">
           <p style="font-size: 22px; font-weight: 900">RGB Color Result</p>
@@ -179,10 +186,43 @@
     </div>
 
     <script>
+      document
+        .getElementById("imageInput")
+        .addEventListener("change", function (event) {
+          const file = event.target.files[0];
+          const preview = document.getElementById("preview");
+          preview.innerHTML = ""; // Clear previous preview content
+
+          if (file) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+              if (file.type.startsWith("image/")) {
+                const img = document.createElement("img");
+                const header = document.createElement("h2");
+                img.src = e.target.result;
+                header.textContent = "Preview Image";
+                img.style.width = "100px";
+                (header.style.fontSize = "30px"),
+                  (header.style.fontWeight = "700"),
+                  preview.appendChild(header);
+                preview.appendChild(img);
+              }
+            };
+
+            if (file.type.startsWith("image/") || file.type === "text/plain") {
+              reader.readAsDataURL(file);
+            } else {
+              preview.textContent = "Unsupported file type.";
+            }
+          } else {
+            preview.textContent = "No file selected.";
+          }
+        });
+
       const dialog = document.getElementById("myDialog");
       function uploadImage() {
         const input = document.getElementById("imageInput");
-        // const dialog = document.getElementById("myDialog");
         const file = input.files[0];
         const formData = new FormData();
         formData.append("image", file);
@@ -214,14 +254,12 @@
         });
       }
 
-      // document.addEventListener("DOMContentLoaded", function () {
       const closeDialog = document.getElementById("closeDialog");
       closeDialog.addEventListener("click", function () {
         dialog.close();
         dialog.style.display = "none";
         window.location.reload();
       });
-      // });
     </script>
   </body>
 </html>
