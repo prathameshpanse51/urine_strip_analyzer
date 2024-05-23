@@ -11,4 +11,4 @@
     ```
 
  ## Demo Video
-https://github.com/prathameshpanse51/urine_strip_analyzer/assets/93512551/183ad38a-6f61-41c3-985a-0ce63db2c350
+https://github.com/prathameshpanse51/urine_strip_analyzer/assets/93512551/a9558087-4d89-412e-a51b-2065ebd8c319
