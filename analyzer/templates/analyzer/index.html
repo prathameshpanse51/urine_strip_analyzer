@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Urine Strip Analyzer</title>
+    <style>
+      body {
+        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+          "Lucida Sans", Arial, sans-serif;
+      }
+      a {
+        text-decoration: none;
+      }
+      .nav {
+        padding: 10px 130px;
+        font-size: 30px;
+        font-weight: 800;
+      }
+      .main-div {
+        display: flex;
+        align-items: start;
+        gap: 40px;
+        margin: 110px 180px 150px;
+      }
+      .heading {
+        font-size: 50px;
+        font-weight: 900;
+        text-align: start;
+      }
+      .heading-para {
+        font-size: 20px;
+        color: gray;
+      }
+      .landing-img {
+        border-radius: 20px;
+        height: 400px;
+        width: 550px;
+      }
+      /* class="flex items-center w-full px-6 py-3 mb-3 text-lg text-white bg-primary rounded-md sm:mb-0 hover:bg-indigo-700 sm:w-auto" */
+      .heading-button {
+        display: flex;
+        align-items: center;
+        width: 30%;
+        padding: 10px 20px;
+        font-size: 17px;
+        margin-top: 15px;
+        color: white;
+        background-color: blueviolet;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+      }
+
+      .urineStrip {
+        height: 100vh;
+        padding: 80px;
+      }
+
+      .urineStripHeading {
+        font-size: 50px;
+        text-align: center;
+      }
+
+      input[type="file"] {
+        display: block;
+        /* width: 100%; */
+        padding: 0.75rem;
+        cursor: pointer;
+        font-size: 20px;
+        margin: 0 auto;
+        margin: 0;
+      }
+      input[type="file"]::file-selector-button {
+        border: none;
+        padding: 0.5em 0.4em;
+        border-radius: 0.2em;
+        background-color: #a29bfe;
+        cursor: pointer;
+      }
+      .input-div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .upload-button {
+        display: flex;
+        align-items: center;
+        padding: 10px 20px;
+        font-size: 17px;
+        color: white;
+        background-color: #1d8fff;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+      }
+      dialog {
+        border: none;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        width: 40%;
+      }
+      .result {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="nav">Alemeno</nav>
+    <div class="main-div">
+      <div>
+        <h1 class="heading">
+          Upload an image of
+          <span style="color: blueviolet"> urine test strip</span> and our
+          System will analyze the colors.
+        </h1>
+        <p class="heading-para">Welcome to Urine Strip Analyzer.</p>
+        <a href="#urineStrip">
+          <button class="heading-button">
+            <span style="width: 140px">Upload</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              style="width: 30px; height: 30px"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </a>
+      </div>
+      <div>
+        <img
+          class="landing-img"
+          src="https://www.shutterstock.com/shutterstock/videos/1110705907/thumb/1.jpg?ip=x480"
+          alt=""
+        />
+      </div>
+    </div>
+
+    <div id="urineStrip" class="urineStrip">
+      <h1 class="urineStripHeading">Upload Urine Strip Image</h1>
+      <div class="input-div">
+        <input type="file" id="imageInput" accept="image/*" />
+
+        <button onclick="uploadImage()" class="upload-button" id="openDialog">
+          Upload
+        </button>
+      </div>
+      <dialog id="myDialog">
+        <div class="result">
+          <p style="font-size: 22px; font-weight: 900">RGB Color Result</p>
+
+          <button
+            id="closeDialog"
+            style="
+              border: none;
+              background: none;
+              font-size: 22px;
+              font-weight: 700;
+              cursor: pointer;
+            "
+          >
+            X
+          </button>
+        </div>
+
+        <pre id="result"></pre>
+      </dialog>
+    </div>
+
+    <script>
+      const dialog = document.getElementById("myDialog");
+      function uploadImage() {
+        const input = document.getElementById("imageInput");
+        // const dialog = document.getElementById("myDialog");
+        const file = input.files[0];
+        const formData = new FormData();
+        formData.append("image", file);
+
+        fetch("/upload/", {
+          // Ensure this URL matches the path defined in the Django app
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            document.getElementById("result").innerText = JSON.stringify(
+              data,
+              null,
+              2
+            );
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            document.getElementById("result").innerText = `Error: ${error}`;
+          });
+        addEventListener("click", function () {
+          dialog.showModal();
+        });
+      }
+
+      // document.addEventListener("DOMContentLoaded", function () {
+      const closeDialog = document.getElementById("closeDialog");
+      closeDialog.addEventListener("click", function () {
+        dialog.close();
+        dialog.style.display = "none";
+        window.location.reload();
+      });
+      // });
+    </script>
+  </body>
+</html>
